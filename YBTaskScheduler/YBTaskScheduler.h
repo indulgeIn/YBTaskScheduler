@@ -54,7 +54,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param task 包裹任务的 block
  @param priority 优先级
  */
-- (void)addTask:(YBTaskBlock)task priority:(YBTaskPriority)priority;;
+- (void)addTask:(YBTaskBlock)task priority:(YBTaskPriority)priority;
 
 /**
  清空所有任务

@@ -42,6 +42,11 @@ struct YBTSPQCMP {
 
 #pragma mark - life cycle
 
+- (void)dealloc {
+    [self clearTasks];
+    pthread_mutex_destroy(&_lock);
+}
+
 - (instancetype)init {
     self = [super init];
     if (self) {
@@ -52,6 +57,16 @@ struct YBTSPQCMP {
         pthread_mutexattr_destroy(&attr);
     }
     return self;
+}
+
+#pragma mark - private
+
+- (void)clearTasks {
+    pthread_mutex_lock(&_lock);
+    while (!_queue.empty()) {
+        _queue.pop();
+    }
+    pthread_mutex_unlock(&_lock);
 }
 
 #pragma mark - <YBTaskSchedulerStrategyProtocol>
@@ -83,11 +98,7 @@ struct YBTSPQCMP {
 }
 
 - (void)ybts_clearTasks {
-    pthread_mutex_lock(&_lock);
-    while (!_queue.empty()) {
-        _queue.pop();
-    }
-    pthread_mutex_unlock(&_lock);
+    [self clearTasks];
 }
 
 
