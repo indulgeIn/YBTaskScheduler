@@ -22,7 +22,7 @@ using namespace std;
 #pragma mark - life cycle
 
 - (void)dealloc {
-    _deque.clear();
+    [self clearTasks];
     pthread_mutex_destroy(&_lock);
 }
 
@@ -36,6 +36,14 @@ using namespace std;
         pthread_mutexattr_destroy(&attr);
     }
     return self;
+}
+
+#pragma mark - private
+
+- (void)clearTasks {
+    pthread_mutex_lock(&_lock);
+    _deque.clear();
+    pthread_mutex_unlock(&_lock);
 }
 
 #pragma mark - <YBTaskSchedulerStrategyProtocol>
@@ -71,9 +79,7 @@ using namespace std;
 }
 
 - (void)ybts_clearTasks {
-    pthread_mutex_lock(&_lock);
-    _deque.clear();
-    pthread_mutex_unlock(&_lock);
+    [self clearTasks];
 }
 
 @end
