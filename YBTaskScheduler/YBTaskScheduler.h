@@ -13,17 +13,33 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface YBTaskScheduler : NSObject
 
+/**
+ 初始化方法
+
+ @param strategy 调度策略
+ @return instancetype
+ */
 - (instancetype)initWithStrategy:(YBTaskSchedulerStrategy)strategy;
+
+/**
+ 快速构造方法
+
+ @param strategy 调度策略
+ @return instancetype
+ */
 + (instancetype)schedulerWithStrategy:(YBTaskSchedulerStrategy)strategy;
 
-/* 每次循环周期执行的任务数量 */
-@property (nonatomic, assign) NSUInteger numberOfExecuteEachTime;
-
-/* 执行任务的线程队列 */
+/* 执行任务的线程队列（若不指定，任务会并行执行） */
 @property (nullable, nonatomic, strong) dispatch_queue_t taskQueue;
 
-/* 最大持有任务数量 */
+/* 最大持有任务数量（调度策略为 YBTaskSchedulerStrategyPriority 时无效） */
 @property (nonatomic, assign) NSUInteger maxNumberOfTasks;
+
+/* 每次执行的任务数量 */
+@property (nonatomic, assign) NSUInteger executeNumber;
+
+/* 执行频率（RunLoop 循环 executeFrequency 次执行一次任务） */
+@property (nonatomic, assign) NSUInteger executeFrequency;
 
 /**
  添加任务
@@ -33,7 +49,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)addTask:(YBTaskBlock)task;
 
 /**
- 添加带优先级的任务（仅调度策略为 YBTaskSchedulerStrategyPriority 时有效）
+ 添加带优先级的任务（优先级仅在调度策略为 YBTaskSchedulerStrategyPriority 时有效）
 
  @param task 包裹任务的 block
  @param priority 优先级

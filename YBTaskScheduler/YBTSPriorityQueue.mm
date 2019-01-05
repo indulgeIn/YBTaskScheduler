@@ -13,11 +13,25 @@
 
 using namespace std;
 
-typedef pair<YBTaskBlock, NSInteger> YBTSPQTask;
+typedef struct YBTSPQTask {
+    YBTaskBlock taskBlock;
+    NSUInteger priority;
+    CFTimeInterval time;
+} YBTSPQTask;
+
+YBTSPQTask YBTSPQTaskMake(YBTaskBlock taskBlock, NSUInteger priority, CFTimeInterval time) {
+    YBTSPQTask pqTask;
+    pqTask.taskBlock = taskBlock;
+    pqTask.priority = priority;
+    pqTask.time = time;
+    return pqTask;
+}
 
 struct YBTSPQCMP {
     bool operator()(YBTSPQTask a, YBTSPQTask b) {
-        return a.second < b.second;
+        if (a.priority == b.priority)
+            return a.time < b.time;
+        return a.priority < b.priority;
     }
 };
 
@@ -25,8 +39,6 @@ struct YBTSPQCMP {
     priority_queue<YBTSPQTask, vector<YBTSPQTask>, YBTSPQCMP> _queue;
     pthread_mutex_t _lock;
 }
-
-@synthesize ybts_maxNumberOfTasks = _ybts_maxNumberOfTasks;
 
 #pragma mark - life cycle
 
@@ -52,7 +64,7 @@ struct YBTSPQCMP {
     if (!task) return;
     
     pthread_mutex_lock(&_lock);
-    _queue.push(make_pair(task, priority));
+    _queue.push(YBTSPQTaskMake(task, priority, CFAbsoluteTimeGetCurrent()));
     pthread_mutex_unlock(&_lock);
 }
 
@@ -63,7 +75,7 @@ struct YBTSPQCMP {
         return;
     }
     YBTSPQTask pqTask = (YBTSPQTask)_queue.top();
-    YBTaskBlock taskBlock = (YBTaskBlock)pqTask.first;
+    YBTaskBlock taskBlock = pqTask.taskBlock;
     _queue.pop();
     pthread_mutex_unlock(&_lock);
     

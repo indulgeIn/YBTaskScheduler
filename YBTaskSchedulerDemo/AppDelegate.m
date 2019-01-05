@@ -25,8 +25,8 @@
     _window.rootViewController = nav;
     [_window makeKeyAndVisible];
   
-    YYFPSLabel *label = [[YYFPSLabel alloc] initWithFrame:CGRectMake(10, 44 + [UIApplication sharedApplication].statusBarFrame.size.height + 10, 0, 0)];
-    [_window addSubview:label];
+//    YYFPSLabel *label = [[YYFPSLabel alloc] initWithFrame:CGRectMake(10, 44 + [UIApplication sharedApplication].statusBarFrame.size.height + 10, 0, 0)];
+//    [_window addSubview:label];
     
     return YES;
 }

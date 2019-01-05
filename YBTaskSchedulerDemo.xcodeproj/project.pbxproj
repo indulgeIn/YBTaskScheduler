@@ -46,6 +46,7 @@
 		2325627321E04B6A009BEE6C /* YBTSQueue.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = YBTSQueue.mm; sourceTree = "<group>"; };
 		2325627421E04B6A009BEE6C /* YBTSStack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YBTSStack.h; sourceTree = "<group>"; };
 		2325627521E04B6A009BEE6C /* YBTSStack.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = YBTSStack.mm; sourceTree = "<group>"; };
+		2325627A21E05B5A009BEE6C /* PrefixHeader.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
 		236645D721DDE77A00AE3AA8 /* YBTaskSchedulerDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YBTaskSchedulerDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		236645DA21DDE77A00AE3AA8 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		236645DB21DDE77A00AE3AA8 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -72,6 +73,7 @@
 				231CADA521DF3396003A6FE9 /* YYFPS */,
 				236645DA21DDE77A00AE3AA8 /* AppDelegate.h */,
 				236645DB21DDE77A00AE3AA8 /* AppDelegate.m */,
+				2325627A21E05B5A009BEE6C /* PrefixHeader.pch */,
 				236645E521DDE77C00AE3AA8 /* LaunchScreen.storyboard */,
 				236645E821DDE77C00AE3AA8 /* Info.plist */,
 				236645E921DDE77C00AE3AA8 /* main.m */,
@@ -115,9 +117,9 @@
 		2325626A21E04B6A009BEE6C /* YBTaskScheduler */ = {
 			isa = PBXGroup;
 			children = (
-				2325626B21E04B6A009BEE6C /* YBTaskScheduler+Internal.h */,
 				2325626C21E04B6A009BEE6C /* YBTaskScheduler.h */,
 				2325626D21E04B6A009BEE6C /* YBTaskScheduler.m */,
+				2325626B21E04B6A009BEE6C /* YBTaskScheduler+Internal.h */,
 				2325626E21E04B6A009BEE6C /* YBTaskSchedulerStrategyProtocol.h */,
 				2325626F21E04B6A009BEE6C /* YBTaskSchedulerTypedef.h */,
 				2325627021E04B6A009BEE6C /* YBTSPriorityQueue.h */,
@@ -373,6 +375,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = UU8H9EQ986;
+				GCC_PREFIX_HEADER = "$(SRCROOT)/YBTaskSchedulerDemo/PrefixHeader.pch";
 				INFOPLIST_FILE = YBTaskSchedulerDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -391,6 +394,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = UU8H9EQ986;
+				GCC_PREFIX_HEADER = "$(SRCROOT)/YBTaskSchedulerDemo/PrefixHeader.pch";
 				INFOPLIST_FILE = YBTaskSchedulerDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = (

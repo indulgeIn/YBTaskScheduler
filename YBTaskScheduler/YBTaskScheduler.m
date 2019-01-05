@@ -27,7 +27,7 @@ static dispatch_queue_t defaultConcurrentQueue() {
         queueCount = queueCount < 8 ? 8 : queueCount > MAX_QUEUE_COUNT ? MAX_QUEUE_COUNT : queueCount;
         if ([UIDevice currentDevice].systemVersion.floatValue >= 8.0) {
             for (NSUInteger i = 0; i < queueCount; i++) {
-                dispatch_queue_attr_t attr = dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_SERIAL, QOS_CLASS_DEFAULT+1, 0);
+                dispatch_queue_attr_t attr = dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_SERIAL, QOS_CLASS_DEFAULT, 0);
                 queues[i] = dispatch_queue_create("com.yb.taskScheduler", attr);
             }
         } else {
@@ -43,12 +43,35 @@ static dispatch_queue_t defaultConcurrentQueue() {
 }
 
 
+static CADisplayLink *displayLink;
+static pthread_mutex_t displayLinkLock;
+
+static void keepRunLoopActive() {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        displayLink = [CADisplayLink displayLinkWithTarget:YBTaskScheduler.self selector:@selector(hash)];
+        [displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
+        pthread_mutex_init(&displayLinkLock, NULL);
+    });
+    pthread_mutex_lock(&displayLinkLock);
+    if (displayLink.paused) {
+        displayLink.paused = NO;
+    }
+    pthread_mutex_unlock(&displayLinkLock);
+}
+
+
 static NSHashTable *taskSchedulers;
 
 static void runLoopObserverCallBack(CFRunLoopObserverRef observer, CFRunLoopActivity activity, void *info) {
+    BOOL keepActive = NO;
     for (YBTaskScheduler *scheduler in taskSchedulers.allObjects) {
-        [scheduler executeTasks];
+        if (!scheduler.empty) {
+            keepActive = YES;
+            [scheduler executeTasks];
+        }
     }
+    displayLink.paused = !keepActive;
 }
 
 static void addRunLoopObserver() {
@@ -62,68 +85,40 @@ static void addRunLoopObserver() {
 }
 
 
-static CADisplayLink *displayLink;
-static int32_t displayLinkCounter = 0;
-static pthread_mutex_t displayLinkLock;
-
-static void addDisplayLink() {
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        displayLink = [CADisplayLink displayLinkWithTarget:YBTaskScheduler.self selector:@selector(hash)];
-        pthread_mutex_init(&displayLinkLock, NULL);
-    });
-    int32_t counter = OSAtomicIncrement32(&displayLinkCounter);
-    if (counter >= 1) {
-        pthread_mutex_lock(&displayLinkLock);
-        [displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
-        pthread_mutex_unlock(&displayLinkLock);
-    }
-}
-
-static void removeDisplayLink() {
-    int32_t counter = OSAtomicDecrement32(&displayLinkCounter);
-    if (counter <= 0) {
-        pthread_mutex_lock(&displayLinkLock);
-        if (displayLink) {
-            [displayLink removeFromRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
-        }
-        pthread_mutex_unlock(&displayLinkLock);
-    }
-}
-
-
 @implementation YBTaskScheduler {
     id<YBTaskSchedulerStrategyProtocol> _strategy;
+    NSUInteger _frequencyCounter;
 }
 
 #pragma mark - life cycle
 
-- (void)dealloc {
-    NSLog(@"释放：%@", self);
-    removeDisplayLink();
-}
-
-- (instancetype)initWithStrategy:(YBTaskSchedulerStrategy)strategy {
+- (instancetype)initWithStrategyObject:(id<YBTaskSchedulerStrategyProtocol>)strategyObject {
     self = [super init];
     if (self) {
-        addDisplayLink();
         addRunLoopObserver();
-        self.numberOfExecuteEachTime = 1;
+        self.executeNumber = 1;
         self.maxNumberOfTasks = NSUIntegerMax;
-        switch (strategy) {
-            case YBTaskSchedulerStrategyLIFO:
-                _strategy = [YBTSStack new];
-                break;
-            case YBTaskSchedulerStrategyFIFO:
-                _strategy = [YBTSQueue new];
-                break;
-            case YBTaskSchedulerStrategyPriority:
-                _strategy = [YBTSPriorityQueue new];
-                break;
-        }
+        self.executeFrequency = 1;
+        _strategy = strategyObject;
         [taskSchedulers addObject:self];
     }
     return self;
+}
+
+- (instancetype)initWithStrategy:(YBTaskSchedulerStrategy)strategy {
+    id<YBTaskSchedulerStrategyProtocol> strategyObject;
+    switch (strategy) {
+        case YBTaskSchedulerStrategyLIFO:
+            strategyObject = [YBTSStack new];
+            break;
+        case YBTaskSchedulerStrategyFIFO:
+            strategyObject = [YBTSQueue new];
+            break;
+        case YBTaskSchedulerStrategyPriority:
+            strategyObject = [YBTSPriorityQueue new];
+            break;
+    }
+    return [self initWithStrategyObject:strategyObject];
 }
 
 + (instancetype)schedulerWithStrategy:(YBTaskSchedulerStrategy)strategy {
@@ -133,11 +128,12 @@ static void removeDisplayLink() {
 #pragma mark - public
 
 - (void)addTask:(YBTaskBlock)task {
-    if (!task) return;
-    [_strategy ybts_addTask:task priority:YBTaskPriorityDefault];
+    [self addTask:task priority:YBTaskPriorityDefault];
 }
 
 - (void)addTask:(YBTaskBlock)task priority:(YBTaskPriority)priority {
+    if (!task) return;
+    keepRunLoopActive();
     [_strategy ybts_addTask:task priority:priority];
 }
 
@@ -147,7 +143,17 @@ static void removeDisplayLink() {
 
 #pragma mark - internal
 
+- (BOOL)empty {
+    return _strategy.ybts_empty;
+}
+
 - (void)executeTasks {
+    if (_frequencyCounter != self.executeFrequency) {
+        ++_frequencyCounter;
+        return;
+    } else {
+        _frequencyCounter = 1;
+    }
     if (_strategy.ybts_empty) return;
         
     dispatch_block_t taskBlock = ^{
@@ -161,16 +167,23 @@ static void removeDisplayLink() {
         taskBlock();
     };
     
-    for (NSUInteger i = 0; i < self.numberOfExecuteEachTime; ++i) {
+    for (NSUInteger i = 0; i < self.executeNumber; ++i) {
         executeBlock();
     }
 }
 
-#pragma mark - getter & setter
+#pragma mark - setter
 
 - (void)setMaxNumberOfTasks:(NSUInteger)maxNumberOfTasks {
     _maxNumberOfTasks = maxNumberOfTasks;
-    _strategy.ybts_maxNumberOfTasks = maxNumberOfTasks;
+    if ([_strategy respondsToSelector:@selector(setYbts_maxNumberOfTasks:)]) {
+        _strategy.ybts_maxNumberOfTasks = maxNumberOfTasks;
+    }
+}
+
+- (void)setExecuteFrequency:(NSUInteger)executeFrequency {
+    _executeFrequency = executeFrequency;
+    _frequencyCounter = executeFrequency;
 }
 
 @end

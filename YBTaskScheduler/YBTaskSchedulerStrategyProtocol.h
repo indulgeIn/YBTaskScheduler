@@ -23,6 +23,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL)ybts_empty;
 
+@optional
+
 @property (nonatomic, assign) NSUInteger ybts_maxNumberOfTasks;
 
 @end

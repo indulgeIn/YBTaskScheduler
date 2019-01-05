@@ -8,14 +8,11 @@
 
 #import "MainViewController.h"
 #import "PhotoAlbumViewController.h"
-#import "YBTaskScheduler.h"
 
 @interface MainViewController ()
 @end
 
-@implementation MainViewController {
-    YBTaskScheduler *_scheduler;
-}
+@implementation MainViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -31,17 +28,6 @@
         [button addTarget:self action:@selector(clickButton:) forControlEvents:UIControlEventTouchUpInside];
         button.tag = i;
         [self.view addSubview:button];
-    }
-    
-    _scheduler = [YBTaskScheduler schedulerWithStrategy:YBTaskSchedulerStrategyPriority];
-    _scheduler.taskQueue = dispatch_get_main_queue();
-    _scheduler.maxNumberOfTasks = 2;
-    
-    for (int i = 0; i < 5; ++i) {
-        [_scheduler addTask:^{
-            usleep(1000 * 1000 * 0.5);
-            NSLog(@"任务%d完成", i);
-        } priority:YBTaskPriorityHigh];
     }
 }
 

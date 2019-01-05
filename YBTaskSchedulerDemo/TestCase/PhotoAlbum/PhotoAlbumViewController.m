@@ -36,9 +36,8 @@ static CGFloat kPadding = 5;
     self.dataArray = [self.class getPHAssets];
     
     //初始化任务调度器
-    _scheduler = [YBTaskScheduler schedulerWithStrategy:YBTaskSchedulerStrategyPriority];
-    //设置最大保持任务数量
-    _scheduler.maxNumberOfTasks = 2;
+    _scheduler = [YBTaskScheduler schedulerWithStrategy:YBTaskSchedulerStrategyLIFO];
+    _scheduler.maxNumberOfTasks = 20;
     
     [self.view addSubview:self.collectionView];
 }

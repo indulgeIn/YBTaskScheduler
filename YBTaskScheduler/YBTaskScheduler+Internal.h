@@ -14,6 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)executeTasks;
 
+- (BOOL)empty;
+
 @end
 
 NS_ASSUME_NONNULL_END
