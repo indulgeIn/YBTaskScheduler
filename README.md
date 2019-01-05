@@ -71,11 +71,13 @@ _scheduler.taskQueue = dispatch_get_main_queue();
 ### 任务淘汰机制
 
 很多时候你需要淘汰掉一部分已经添加到`YBTaskScheduler`的任务。
+
 比如上面举得在 UITableView 的 cell 中异步裁剪头像图片的例子，当用户快速滑动时，假设有 100 个任务添加到了任务调度器中，而前 90 个 cell 已经滑出了屏幕，它们的异步任务已经不需要了（建立在你不会缓存异步结果的前提下）：
 ```objc
 _scheduler.maxNumberOfTasks = 20;
 ```
-这里设置最大任务数量为 20，若添加的任务大于了这个数量，会删除掉优先级低的任务。而不同的任务调度策略有不同的效果，比如 YBTaskSchedulerStrategyLIFO 策略会删除先加入的任务，YBTaskSchedulerStrategyFIFO 策略会删除后加入的任务，注意 YBTaskSchedulerStrategyPriority 暂时不支持任务淘汰机制（由于 C++ 优先队列不支持低优先级节点删除，后面考虑自己实现）。
+这里设置最大任务数量为 20，若添加的任务大于了这个数量，会删除掉优先级低的任务。
+而不同的任务调度策略有不同的效果，比如 YBTaskSchedulerStrategyLIFO 策略会删除先加入的任务，YBTaskSchedulerStrategyFIFO 策略会删除后加入的任务，注意 YBTaskSchedulerStrategyPriority 暂时不支持任务淘汰机制（由于 C++ 优先队列不支持低优先级节点删除，后面考虑自己实现）。
 
 ### 任务调用频率控制
 
