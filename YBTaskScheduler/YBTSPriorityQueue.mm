@@ -8,8 +8,8 @@
 
 #import "YBTSPriorityQueue.h"
 #import <pthread.h>
-#import <queue>
-#import <vector>
+#include <queue>
+#include <vector>
 
 using namespace std;
 
