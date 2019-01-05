@@ -13,10 +13,10 @@
 		231CADA421DF2C4E003A6FE9 /* PhotoAlbumCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 231CADA221DF2C4E003A6FE9 /* PhotoAlbumCell.xib */; };
 		231CADAA21DF3396003A6FE9 /* YYFPSLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 231CADA721DF3396003A6FE9 /* YYFPSLabel.m */; };
 		231CADAB21DF3396003A6FE9 /* YYWeakProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 231CADA921DF3396003A6FE9 /* YYWeakProxy.m */; };
-		2325627621E04B6A009BEE6C /* YBTaskScheduler.m in Sources */ = {isa = PBXBuildFile; fileRef = 2325626D21E04B6A009BEE6C /* YBTaskScheduler.m */; };
-		2325627721E04B6A009BEE6C /* YBTSPriorityQueue.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2325627121E04B6A009BEE6C /* YBTSPriorityQueue.mm */; };
-		2325627821E04B6A009BEE6C /* YBTSQueue.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2325627321E04B6A009BEE6C /* YBTSQueue.mm */; };
-		2325627921E04B6A009BEE6C /* YBTSStack.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2325627521E04B6A009BEE6C /* YBTSStack.mm */; };
+		233C713B21E08D6900D2AE95 /* YBTaskScheduler.m in Sources */ = {isa = PBXBuildFile; fileRef = 233C713221E08D6900D2AE95 /* YBTaskScheduler.m */; };
+		233C713C21E08D6900D2AE95 /* YBTSPriorityQueue.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233C713621E08D6900D2AE95 /* YBTSPriorityQueue.mm */; };
+		233C713D21E08D6900D2AE95 /* YBTSQueue.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233C713821E08D6900D2AE95 /* YBTSQueue.mm */; };
+		233C713E21E08D6900D2AE95 /* YBTSStack.mm in Sources */ = {isa = PBXBuildFile; fileRef = 233C713A21E08D6900D2AE95 /* YBTSStack.mm */; };
 		236645DC21DDE77A00AE3AA8 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 236645DB21DDE77A00AE3AA8 /* AppDelegate.m */; };
 		236645E421DDE77C00AE3AA8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 236645E321DDE77C00AE3AA8 /* Assets.xcassets */; };
 		236645E721DDE77C00AE3AA8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 236645E521DDE77C00AE3AA8 /* LaunchScreen.storyboard */; };
@@ -35,18 +35,18 @@
 		231CADA721DF3396003A6FE9 /* YYFPSLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YYFPSLabel.m; sourceTree = "<group>"; };
 		231CADA821DF3396003A6FE9 /* YYWeakProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YYWeakProxy.h; sourceTree = "<group>"; };
 		231CADA921DF3396003A6FE9 /* YYWeakProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YYWeakProxy.m; sourceTree = "<group>"; };
-		2325626B21E04B6A009BEE6C /* YBTaskScheduler+Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "YBTaskScheduler+Internal.h"; sourceTree = "<group>"; };
-		2325626C21E04B6A009BEE6C /* YBTaskScheduler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YBTaskScheduler.h; sourceTree = "<group>"; };
-		2325626D21E04B6A009BEE6C /* YBTaskScheduler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YBTaskScheduler.m; sourceTree = "<group>"; };
-		2325626E21E04B6A009BEE6C /* YBTaskSchedulerStrategyProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YBTaskSchedulerStrategyProtocol.h; sourceTree = "<group>"; };
-		2325626F21E04B6A009BEE6C /* YBTaskSchedulerTypedef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YBTaskSchedulerTypedef.h; sourceTree = "<group>"; };
-		2325627021E04B6A009BEE6C /* YBTSPriorityQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YBTSPriorityQueue.h; sourceTree = "<group>"; };
-		2325627121E04B6A009BEE6C /* YBTSPriorityQueue.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = YBTSPriorityQueue.mm; sourceTree = "<group>"; };
-		2325627221E04B6A009BEE6C /* YBTSQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YBTSQueue.h; sourceTree = "<group>"; };
-		2325627321E04B6A009BEE6C /* YBTSQueue.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = YBTSQueue.mm; sourceTree = "<group>"; };
-		2325627421E04B6A009BEE6C /* YBTSStack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YBTSStack.h; sourceTree = "<group>"; };
-		2325627521E04B6A009BEE6C /* YBTSStack.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = YBTSStack.mm; sourceTree = "<group>"; };
 		2325627A21E05B5A009BEE6C /* PrefixHeader.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
+		233C713021E08D6900D2AE95 /* YBTaskScheduler+Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "YBTaskScheduler+Internal.h"; sourceTree = "<group>"; };
+		233C713121E08D6900D2AE95 /* YBTaskScheduler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YBTaskScheduler.h; sourceTree = "<group>"; };
+		233C713221E08D6900D2AE95 /* YBTaskScheduler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YBTaskScheduler.m; sourceTree = "<group>"; };
+		233C713321E08D6900D2AE95 /* YBTaskSchedulerStrategyProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YBTaskSchedulerStrategyProtocol.h; sourceTree = "<group>"; };
+		233C713421E08D6900D2AE95 /* YBTaskSchedulerTypedef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YBTaskSchedulerTypedef.h; sourceTree = "<group>"; };
+		233C713521E08D6900D2AE95 /* YBTSPriorityQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YBTSPriorityQueue.h; sourceTree = "<group>"; };
+		233C713621E08D6900D2AE95 /* YBTSPriorityQueue.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = YBTSPriorityQueue.mm; sourceTree = "<group>"; };
+		233C713721E08D6900D2AE95 /* YBTSQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YBTSQueue.h; sourceTree = "<group>"; };
+		233C713821E08D6900D2AE95 /* YBTSQueue.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = YBTSQueue.mm; sourceTree = "<group>"; };
+		233C713921E08D6900D2AE95 /* YBTSStack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YBTSStack.h; sourceTree = "<group>"; };
+		233C713A21E08D6900D2AE95 /* YBTSStack.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = YBTSStack.mm; sourceTree = "<group>"; };
 		236645D721DDE77A00AE3AA8 /* YBTaskSchedulerDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YBTaskSchedulerDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		236645DA21DDE77A00AE3AA8 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		236645DB21DDE77A00AE3AA8 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -114,20 +114,20 @@
 			path = YYFPS;
 			sourceTree = "<group>";
 		};
-		2325626A21E04B6A009BEE6C /* YBTaskScheduler */ = {
+		233C712F21E08D6900D2AE95 /* YBTaskScheduler */ = {
 			isa = PBXGroup;
 			children = (
-				2325626C21E04B6A009BEE6C /* YBTaskScheduler.h */,
-				2325626D21E04B6A009BEE6C /* YBTaskScheduler.m */,
-				2325626B21E04B6A009BEE6C /* YBTaskScheduler+Internal.h */,
-				2325626E21E04B6A009BEE6C /* YBTaskSchedulerStrategyProtocol.h */,
-				2325626F21E04B6A009BEE6C /* YBTaskSchedulerTypedef.h */,
-				2325627021E04B6A009BEE6C /* YBTSPriorityQueue.h */,
-				2325627121E04B6A009BEE6C /* YBTSPriorityQueue.mm */,
-				2325627221E04B6A009BEE6C /* YBTSQueue.h */,
-				2325627321E04B6A009BEE6C /* YBTSQueue.mm */,
-				2325627421E04B6A009BEE6C /* YBTSStack.h */,
-				2325627521E04B6A009BEE6C /* YBTSStack.mm */,
+				233C713021E08D6900D2AE95 /* YBTaskScheduler+Internal.h */,
+				233C713121E08D6900D2AE95 /* YBTaskScheduler.h */,
+				233C713221E08D6900D2AE95 /* YBTaskScheduler.m */,
+				233C713321E08D6900D2AE95 /* YBTaskSchedulerStrategyProtocol.h */,
+				233C713421E08D6900D2AE95 /* YBTaskSchedulerTypedef.h */,
+				233C713521E08D6900D2AE95 /* YBTSPriorityQueue.h */,
+				233C713621E08D6900D2AE95 /* YBTSPriorityQueue.mm */,
+				233C713721E08D6900D2AE95 /* YBTSQueue.h */,
+				233C713821E08D6900D2AE95 /* YBTSQueue.mm */,
+				233C713921E08D6900D2AE95 /* YBTSStack.h */,
+				233C713A21E08D6900D2AE95 /* YBTSStack.mm */,
 			);
 			path = YBTaskScheduler;
 			sourceTree = SOURCE_ROOT;
@@ -151,7 +151,7 @@
 		236645D921DDE77A00AE3AA8 /* YBTaskSchedulerDemo */ = {
 			isa = PBXGroup;
 			children = (
-				2325626A21E04B6A009BEE6C /* YBTaskScheduler */,
+				233C712F21E08D6900D2AE95 /* YBTaskScheduler */,
 				231CAD9B21DF2BB1003A6FE9 /* TestCase */,
 				231CAD9A21DF2BA4003A6FE9 /* AppEntrance */,
 				236645E321DDE77C00AE3AA8 /* Assets.xcassets */,
@@ -230,15 +230,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				231CADAB21DF3396003A6FE9 /* YYWeakProxy.m in Sources */,
-				2325627821E04B6A009BEE6C /* YBTSQueue.mm in Sources */,
-				2325627621E04B6A009BEE6C /* YBTaskScheduler.m in Sources */,
+				233C713D21E08D6900D2AE95 /* YBTSQueue.mm in Sources */,
+				233C713B21E08D6900D2AE95 /* YBTaskScheduler.m in Sources */,
 				231CAD9821DF2A7D003A6FE9 /* MainViewController.m in Sources */,
 				236645EA21DDE77C00AE3AA8 /* main.m in Sources */,
-				2325627721E04B6A009BEE6C /* YBTSPriorityQueue.mm in Sources */,
+				233C713C21E08D6900D2AE95 /* YBTSPriorityQueue.mm in Sources */,
 				236645DC21DDE77A00AE3AA8 /* AppDelegate.m in Sources */,
 				231CADAA21DF3396003A6FE9 /* YYFPSLabel.m in Sources */,
 				231CAD9F21DF2C04003A6FE9 /* PhotoAlbumViewController.m in Sources */,
-				2325627921E04B6A009BEE6C /* YBTSStack.mm in Sources */,
+				233C713E21E08D6900D2AE95 /* YBTSStack.mm in Sources */,
 				231CADA321DF2C4E003A6FE9 /* PhotoAlbumCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
