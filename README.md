@@ -19,6 +19,8 @@ iOS 任务调度器，为 CPU 和内存减负 / iOS task scheduler, reduce the b
 2. 执行 `pod install` 或 `pod update`。
 3. 导入 `<YBTaskScheduler/YBTaskScheduler.h>`。
 
+若搜索不到库，可使用 rm ~/Library/Caches/CocoaPods/search_index.json 移除本地索引然后再执行安装，或者更新一下 CocoaPods 版本。
+
 ### 手动导入
 
 1. 下载 YBTaskScheduler 文件夹所有内容并且拖入你的工程中。
@@ -95,7 +97,6 @@ _scheduler.executeNumber = 2;
 _scheduler.executeFrequency = 5;
 ```
 那么就表示 RunLoop 循环 5 次调用 2 个任务。
-
 
 
 
