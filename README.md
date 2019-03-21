@@ -22,7 +22,7 @@ iOS 任务调度器，为 CPU 和内存减负 / iOS task scheduler, reduce the b
 ### 手动导入
 
 1. 下载 YBTaskScheduler 文件夹所有内容并且拖入你的工程中。
-2. 导入 `YBTaskScheduler.h`
+2. 导入 `YBTaskScheduler.h`。
 
 
 ## 用法
