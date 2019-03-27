@@ -1,4 +1,8 @@
-# YBTaskScheduler (Latest version : 1.0.1)
+# YBTaskScheduler 
+[![Cocoapods](https://img.shields.io/cocoapods/v/YBTaskScheduler.svg)](https://cocoapods.org/pods/YBTaskScheduler)&nbsp;
+[![Cocoapods](https://img.shields.io/cocoapods/p/YBTaskScheduler.svg)](https://github.com/indulgeIn/YBTaskScheduler)&nbsp;
+[![License](https://img.shields.io/github/license/indulgeIn/YBTaskScheduler.svg)](https://github.com/indulgeIn/YBTaskScheduler)&nbsp;
+
 iOS 任务调度器，为 CPU 和内存减负 / iOS task scheduler, reduce the burden of CPU and memory
 
 技术原理博客：[iOS 任务调度器：为 CPU 和内存减负](https://www.jianshu.com/p/f2a610c77d26)
