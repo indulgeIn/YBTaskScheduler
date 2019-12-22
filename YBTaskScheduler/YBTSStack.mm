@@ -71,6 +71,7 @@ using namespace std;
         pthread_mutex_unlock(&_lock);
         return;
     }
+    
     YBTaskBlock taskBlock = (YBTaskBlock)_deque.front();
     _deque.pop_front();
     pthread_mutex_unlock(&_lock);

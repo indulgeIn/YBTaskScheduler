@@ -13,11 +13,11 @@
 
 using namespace std;
 
-typedef struct YBTSPQTask {
+struct YBTSPQTask {
     YBTaskBlock taskBlock;
     NSUInteger priority;
     CFTimeInterval time;
-} YBTSPQTask;
+};
 
 YBTSPQTask YBTSPQTaskMake(YBTaskBlock taskBlock, NSUInteger priority, CFTimeInterval time) {
     YBTSPQTask pqTask;
@@ -89,6 +89,7 @@ struct YBTSPQCMP {
         pthread_mutex_unlock(&_lock);
         return;
     }
+    
     YBTSPQTask pqTask = (YBTSPQTask)_queue.top();
     YBTaskBlock taskBlock = pqTask.taskBlock;
     _queue.pop();
@@ -100,6 +101,5 @@ struct YBTSPQCMP {
 - (void)ybts_clearTasks {
     [self clearTasks];
 }
-
 
 @end

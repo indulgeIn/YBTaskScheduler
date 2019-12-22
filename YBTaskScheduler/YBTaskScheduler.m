@@ -42,42 +42,41 @@ static dispatch_queue_t YBTSDefaultConcurrentQueue() {
 #undef MAX_QUEUE_COUNT
 }
 
+static NSHashTable *YBTaskSchedulers(void) {
+    static NSHashTable *schedulers = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        schedulers = [NSHashTable weakObjectsHashTable];
+    });
+    return schedulers;
+}
 
-static CADisplayLink *displayLink;
-static pthread_mutex_t displayLinkLock;
-
-static void YBTSKeepRunLoopActive() {
+static CADisplayLink *YBTSDisplayLink(void) {
+    static CADisplayLink *displayLink = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         displayLink = [CADisplayLink displayLinkWithTarget:YBTaskScheduler.self selector:@selector(hash)];
         [displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
-        pthread_mutex_init(&displayLinkLock, NULL);
     });
-    pthread_mutex_lock(&displayLinkLock);
-    if (displayLink.paused) {
-        displayLink.paused = NO;
-    }
-    pthread_mutex_unlock(&displayLinkLock);
+    return displayLink;
 }
-
-
-static NSHashTable *taskSchedulers;
 
 static void YBTSRunLoopObserverCallBack(CFRunLoopObserverRef observer, CFRunLoopActivity activity, void *info) {
     BOOL keepActive = NO;
-    for (YBTaskScheduler *scheduler in taskSchedulers.allObjects) {
+    for (YBTaskScheduler *scheduler in YBTaskSchedulers().allObjects) {
         if (!scheduler.empty) {
             keepActive = YES;
             [scheduler executeTasks];
         }
     }
-    displayLink.paused = !keepActive;
+    if (YBTSDisplayLink().paused == keepActive) {
+        YBTSDisplayLink().paused = !keepActive;
+    }
 }
 
 static void YBTSAddRunLoopObserver() {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        taskSchedulers = [NSHashTable weakObjectsHashTable];
         CFRunLoopObserverRef observer = CFRunLoopObserverCreate(CFAllocatorGetDefault(), kCFRunLoopBeforeWaiting | kCFRunLoopExit, true, 0xFFFFFF, YBTSRunLoopObserverCallBack, NULL);
         CFRunLoopAddObserver(CFRunLoopGetMain(), observer, kCFRunLoopCommonModes);
         CFRelease(observer);
@@ -100,7 +99,7 @@ static void YBTSAddRunLoopObserver() {
         self.maxNumberOfTasks = NSUIntegerMax;
         self.executeFrequency = 1;
         _strategy = strategyObject;
-        [taskSchedulers addObject:self];
+        [YBTaskSchedulers() addObject:self];
     }
     return self;
 }
@@ -134,7 +133,7 @@ static void YBTSAddRunLoopObserver() {
 - (void)addTask:(YBTaskBlock)task priority:(YBTaskPriority)priority {
     if (!task) return;
     [_strategy ybts_addTask:task priority:priority];
-    YBTSKeepRunLoopActive();
+    YBTSDisplayLink().paused = NO;
 }
 
 - (void)clearTasks {
