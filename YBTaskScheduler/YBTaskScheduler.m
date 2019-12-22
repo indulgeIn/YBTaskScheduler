@@ -16,7 +16,7 @@
 #import "YBTaskScheduler+Internal.h"
 
 
-static dispatch_queue_t defaultConcurrentQueue() {
+static dispatch_queue_t YBTSDefaultConcurrentQueue() {
 #define MAX_QUEUE_COUNT 16
     static int queueCount;
     static dispatch_queue_t queues[MAX_QUEUE_COUNT];
@@ -46,7 +46,7 @@ static dispatch_queue_t defaultConcurrentQueue() {
 static CADisplayLink *displayLink;
 static pthread_mutex_t displayLinkLock;
 
-static void keepRunLoopActive() {
+static void YBTSKeepRunLoopActive() {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         displayLink = [CADisplayLink displayLinkWithTarget:YBTaskScheduler.self selector:@selector(hash)];
@@ -63,7 +63,7 @@ static void keepRunLoopActive() {
 
 static NSHashTable *taskSchedulers;
 
-static void runLoopObserverCallBack(CFRunLoopObserverRef observer, CFRunLoopActivity activity, void *info) {
+static void YBTSRunLoopObserverCallBack(CFRunLoopObserverRef observer, CFRunLoopActivity activity, void *info) {
     BOOL keepActive = NO;
     for (YBTaskScheduler *scheduler in taskSchedulers.allObjects) {
         if (!scheduler.empty) {
@@ -74,11 +74,11 @@ static void runLoopObserverCallBack(CFRunLoopObserverRef observer, CFRunLoopActi
     displayLink.paused = !keepActive;
 }
 
-static void addRunLoopObserver() {
+static void YBTSAddRunLoopObserver() {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         taskSchedulers = [NSHashTable weakObjectsHashTable];
-        CFRunLoopObserverRef observer = CFRunLoopObserverCreate(CFAllocatorGetDefault(), kCFRunLoopBeforeWaiting | kCFRunLoopExit, true, 0xFFFFFF, runLoopObserverCallBack, NULL);
+        CFRunLoopObserverRef observer = CFRunLoopObserverCreate(CFAllocatorGetDefault(), kCFRunLoopBeforeWaiting | kCFRunLoopExit, true, 0xFFFFFF, YBTSRunLoopObserverCallBack, NULL);
         CFRunLoopAddObserver(CFRunLoopGetMain(), observer, kCFRunLoopCommonModes);
         CFRelease(observer);
     });
@@ -95,7 +95,7 @@ static void addRunLoopObserver() {
 - (instancetype)initWithStrategyObject:(id<YBTaskSchedulerStrategyProtocol>)strategyObject {
     self = [super init];
     if (self) {
-        addRunLoopObserver();
+        YBTSAddRunLoopObserver();
         self.executeNumber = 1;
         self.maxNumberOfTasks = NSUIntegerMax;
         self.executeFrequency = 1;
@@ -133,8 +133,8 @@ static void addRunLoopObserver() {
 
 - (void)addTask:(YBTaskBlock)task priority:(YBTaskPriority)priority {
     if (!task) return;
-    keepRunLoopActive();
     [_strategy ybts_addTask:task priority:priority];
+    YBTSKeepRunLoopActive();
 }
 
 - (void)clearTasks {
@@ -162,10 +162,8 @@ static void addRunLoopObserver() {
     
     BOOL needSwitchQueue = !self.taskQueue || strcmp(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL), dispatch_queue_get_label(self.taskQueue)) != 0;
     void(^executeBlock)(void) = needSwitchQueue ? ^{
-        dispatch_async(self.taskQueue ?: defaultConcurrentQueue(), taskBlock);
-    } : ^{
-        taskBlock();
-    };
+        dispatch_async(self.taskQueue ?: YBTSDefaultConcurrentQueue(), taskBlock);
+    } : taskBlock;
     
     for (NSUInteger i = 0; i < self.executeNumber; ++i) {
         executeBlock();

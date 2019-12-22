@@ -13,7 +13,6 @@
 
 static NSString * const kReuseIdentifierOfPhotoAlbumCell = @"kReuseIdentifierOfPhotoAlbumCell";
 static CGFloat kPadding = 5;
-#define kPhotoAlbumCellLength (([UIScreen mainScreen].bounds.size.width - kPadding * 2) / 3)
 
 @interface PhotoAlbumViewController ()<UICollectionViewDataSource, UICollectionViewDelegate>
 @property (nonatomic, strong) UICollectionView *collectionView;
@@ -49,9 +48,13 @@ static CGFloat kPadding = 5;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    /* 特别说明：
-     此处很多逻辑应该放 Cell 里面，业务处理方式也并不是最优的，此处只是为了演示。
-     */
+    
+    /*
+     ⚠️ 特别说明：
+     此处很多逻辑应该放 Cell 里面，业务处理方式也并不是最优的，只是为了演示。
+    */
+    
+    PHAsset *phAsset = self.dataArray[indexPath.row];
     
     PhotoAlbumCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kReuseIdentifierOfPhotoAlbumCell forIndexPath:indexPath];
     cell.imgView.image = nil;
@@ -59,15 +62,13 @@ static CGFloat kPadding = 5;
     cell.tag = indexPath.row;
     NSInteger tmpTag = cell.tag;
     
-    PHAsset *phAsset = self.dataArray[indexPath.row];
-    
-    [_scheduler addTask:^{
-        
+    // 任务闭包
+    YBTaskBlock taskBlock = ^{
         //获取相册图片
         PHImageRequestOptions *options = [PHImageRequestOptions new];
         options.synchronous = YES;
         options.resizeMode = PHImageRequestOptionsResizeModeFast;
-        CGFloat imgL = (kPhotoAlbumCellLength - kPadding * 2) * [UIScreen mainScreen].scale;
+        CGFloat imgL = ([self photoAlbumCellLength] - kPadding * 2) * [UIScreen mainScreen].scale;
         [[PHImageManager defaultManager] requestImageForAsset:phAsset targetSize:CGSizeMake(imgL, imgL) contentMode:PHImageContentModeAspectFit options:options resultHandler:^(UIImage *result, NSDictionary *info){
             BOOL downloadFinined = ![[info objectForKey:PHImageCancelledKey] boolValue] && ![info objectForKey:PHImageErrorKey] && ![[info objectForKey:PHImageResultIsDegradedKey] boolValue];
             if (downloadFinined && result) {
@@ -100,14 +101,24 @@ static CGFloat kPadding = 5;
                 });
             }
         }];
-        
-    }];
+    };
+    
+    // ① 将任务添加进任务调度器
+    [_scheduler addTask:taskBlock];
+    
+    // ② 异步执行
+//    dispatch_async(dispatch_get_global_queue(0, 0), taskBlock);
+    
+    // ③ 同步执行
+//    taskBlock();
 
     return cell;
 }
 
-- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    
+#pragma mark - private
+
+- (CGFloat)photoAlbumCellLength {
+    return ([UIScreen mainScreen].bounds.size.width - kPadding * 2) / 3;
 }
 
 #pragma mark - getter
@@ -115,7 +126,7 @@ static CGFloat kPadding = 5;
 - (UICollectionView *)collectionView {
     if (!_collectionView) {
         UICollectionViewFlowLayout *layout = [UICollectionViewFlowLayout new];
-        layout.itemSize = CGSizeMake(kPhotoAlbumCellLength, kPhotoAlbumCellLength);
+        layout.itemSize = CGSizeMake([self photoAlbumCellLength], [self photoAlbumCellLength]);
         layout.sectionInset = UIEdgeInsetsMake(kPadding, kPadding, kPadding, kPadding);
         layout.minimumLineSpacing = 0;
         layout.minimumInteritemSpacing = 0;
@@ -160,6 +171,5 @@ static CGFloat kPadding = 5;
     }];
     return arr;
 }
-
 
 @end

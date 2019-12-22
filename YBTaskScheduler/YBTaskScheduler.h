@@ -29,7 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (instancetype)schedulerWithStrategy:(YBTaskSchedulerStrategy)strategy;
 
-/* 执行任务的线程队列（若不指定，任务会并行执行） */
+/* 执行任务的线程队列（若不指定，任务会在子线程并行执行） */
 @property (nullable, nonatomic, strong) dispatch_queue_t taskQueue;
 
 /* 最大持有任务数量（调度策略为 YBTaskSchedulerStrategyPriority 时无效） */
