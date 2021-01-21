@@ -38,7 +38,9 @@ static dispatch_queue_t YBTSDefaultConcurrentQueue() {
         }
     });
     uint32_t cur = (uint32_t)OSAtomicIncrement32(&counter);
-    return queues[(cur) % queueCount];
+    
+    // queueCount 要么是 2^3，要么是 2^4
+    return queues[cur & (queueCount - 1)];
 #undef MAX_QUEUE_COUNT
 }
 
