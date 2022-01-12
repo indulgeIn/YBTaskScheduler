@@ -10,6 +10,24 @@
 #import "MainViewController.h"
 #import "YYFPSLabel.h"
 
+static void configureUINavigationBarAppearance(void)
+{
+    NSDictionary *titleTextAttributes = @{NSForegroundColorAttributeName: UIColor.whiteColor};
+    UIColor *barTintColor = UIColor.whiteColor;
+    if (@available(iOS 13.0, *)) {
+        UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
+        appearance.titleTextAttributes = titleTextAttributes;
+        appearance.backgroundColor = barTintColor;
+        
+        [UINavigationBar appearance].standardAppearance = appearance;
+        [UINavigationBar appearance].scrollEdgeAppearance = appearance;
+    } else {
+        [UINavigationBar appearance].titleTextAttributes = titleTextAttributes;
+        [UINavigationBar appearance].barTintColor = barTintColor;
+    }
+    [UINavigationBar appearance].translucent = NO;
+}
+
 @interface AppDelegate ()
 
 @end
@@ -19,10 +37,10 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 
+    configureUINavigationBarAppearance();
+    
     _window = [[UIWindow alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
-    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:[MainViewController new]];
-    nav.navigationBar.translucent = NO;
-    _window.rootViewController = nav;
+    _window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[MainViewController new]];
     [_window makeKeyAndVisible];
   
 //    YYFPSLabel *label = [[YYFPSLabel alloc] initWithFrame:CGRectMake(10, 44 + [UIApplication sharedApplication].statusBarFrame.size.height + 10, 0, 0)];
